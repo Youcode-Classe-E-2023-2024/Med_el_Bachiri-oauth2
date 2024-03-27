@@ -234,6 +234,40 @@
                     }
                 }
             }
+        },
+        "/api/user/password/new": {
+            "put": {
+                "summary": "Update user password",
+                "operationId": "2a9dc0374c211b4c64125314c5b92631",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "The ID of the user you want to update",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "The new password ",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Password updated successfully"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
         }
     },
     "components": {
