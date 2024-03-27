@@ -24,7 +24,21 @@ Route::namespace('Api')->group(function () {
     });
 
     Route::middleware('auth:api')->group( function () {
-        Route::get('user', [UserController::class, 'getUserDetails'])->middleware(isAdmin::class);
         Route::post('logout', [AuthController::class, 'logout']);
+
+        Route::get('me', [UserController::class, 'getUserDetails']);
+
+        Route::middleware('permission:view-users')->group(function () {
+            Route::get('users', [UserController::class, 'getAllUsers']);
+            Route::prefix('user')->group(function () {
+                Route::post('create', [AuthController::class, 'register']);
+                Route::delete('delete/{user_id}', [UserController::class, 'delete']);
+                Route::put('update/{user_id}', [UserController::class, 'update']);
+            });
+        });
+        Route::middleware('permission:manage-roles')->group(function () {
+
+        });
+
     });
 });
