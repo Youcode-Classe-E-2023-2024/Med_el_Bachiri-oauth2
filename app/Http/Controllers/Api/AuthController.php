@@ -29,7 +29,7 @@ class AuthController extends Controller
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
-     *     @OA\Response(response="200", description="Login successful"),
+     *     @OA\Response(response="201", description="Login successful"),
      *     @OA\Response(response="401", description="Invalid credentials")
      * )
      */
@@ -51,7 +51,7 @@ class AuthController extends Controller
         $user->access_token = $token->accessToken;
         return response()->json([
             'user' => $user,
-        ], 200);
+        ], 201);
     }
 
     // register
@@ -96,12 +96,13 @@ class AuthController extends Controller
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'role' => 'User',
         ]);
+
+        $user->assignRole('User');
 
         return response()->json([
             'message' => 'user created successfully !'
-        ], 200);
+        ], 201);
     }
 
 // logout
@@ -110,7 +111,7 @@ class AuthController extends Controller
      *     path="/api/logout",
      *     summary="Log out user and revoke JWT token",
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(response="200", description="Logout successful"),
+     *     @OA\Response(response="201", description="Logout successful"),
      *     @OA\Response(response="401", description="Unauthenticated")
      * )
      */
@@ -119,6 +120,6 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'User logged out successfully!'
-        ], 200);
+        ], 201);
     }
 }
