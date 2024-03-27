@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +22,15 @@ class UserController extends Controller
     public function getUserDetails(Request $request): \Illuminate\Http\JsonResponse
     {
         $user = $request->user();
-        return response()->json(['user' => $user], 201);
+
+        $role = $user->roles()->pluck('name');
+        $permissions = $role->first() !== null ? $user->roles()->first()->permissions()->pluck('name') : [];
+
+        return response()->json([
+            'user' => $user,
+            'role' => $role->first() ? $role->first() : null,
+            'permissions' => $permissions
+        ], 201);
     }
 
 
@@ -34,27 +44,37 @@ class UserController extends Controller
      */
     public function getAllUsers(Request $request): \Illuminate\Http\JsonResponse
     {
-        $users = User::with(['roles'])->get();
-        return response()->json(['users' => $users], 201);
+        $users = User::all();
+        $data = [];
+        foreach ($users as $user) {
+            $data[] = [
+                'user' => $user,
+                'role' => $user->roles()->pluck('name')->first(),
+                'permissions' => $user->roles()->first()->permissions()->pluck('name'),
+            ];
+        }
+
+        return response()->json(['users' => $data], 200);
+
     }
 
     /**
-     * @OA\Post(
+     * @OA\Delete(
      *     path="/api/user/delete",
-     *     summary="delete a user",
+     *     summary="Delete a user",
      *     @OA\Parameter(
      *         name="user_id",
      *         in="query",
-     *         description="The id of the user you want to delete",
+     *         description="The ID of the user you want to delete",
      *         required=true,
      *         @OA\Schema(type="string")
      *     ),
-     *
-     *     @OA\Response(response="201", description="User deleted successfully"),
-     *     @OA\Response(response="404", description="User not found.")
-     *     @OA\Response(response="403", description="SuperAdmin user cannot be deleted.")
+     *     @OA\Response(response="200", description="User deleted successfully"),
+     *     @OA\Response(response="404", description="User not found"),
+     *     @OA\Response(response="403", description="SuperAdmin user cannot be deleted")
      * )
      */
+
     public function delete(Request $request)
     {
         $user = User::find($request->user_id);
@@ -68,6 +88,24 @@ class UserController extends Controller
         return response()->json(['message' => 'User deleted successfully.'], 201);
     }
 
+
+    /**
+     * @OA\Put(
+     *     path="/api/user/update",
+     *     summary="Update a user",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         description="The ID of the user you want to update",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="200", description="User updated successfully"),
+     *     @OA\Response(response="404", description="User not found"),
+     *     @OA\Response(response="403", description="SuperAdmin user cannot be updated"),
+     *     @OA\Response(response="422", description="Role does not exist")
+     * )
+     */
 
     public function update(Request $request)
     {
