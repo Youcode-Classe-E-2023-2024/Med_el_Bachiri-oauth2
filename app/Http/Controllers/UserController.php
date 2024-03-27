@@ -68,7 +68,7 @@ class UserController extends Controller
      *         in="query",
      *         description="The ID of the user you want to delete",
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(response="200", description="User deleted successfully"),
      *     @OA\Response(response="404", description="User not found"),
@@ -99,7 +99,7 @@ class UserController extends Controller
      *         in="query",
      *         description="The ID of the user you want to update",
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Response(response="200", description="User updated successfully"),
      *     @OA\Response(response="404", description="User not found"),
@@ -159,7 +159,7 @@ class UserController extends Controller
      *         in="query",
      *         description="The ID of the user you want to update",
      *         required=true,
-     *         @OA\Schema(type="string")
+     *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
      *         name="password",
@@ -188,8 +188,8 @@ class UserController extends Controller
         return response()->json(['message' => 'User Password updated successfully !'], 201);
     }
 
-
-    /* @OA\Put(
+    /**
+     * @OA\Put(
      *     path="/api/me/password/new",
      *     summary="Update my password",
      *     @OA\Parameter(
