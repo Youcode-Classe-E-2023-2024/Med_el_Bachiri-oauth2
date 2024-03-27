@@ -30,7 +30,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Login successful"
                     },
                     "401": {
@@ -82,10 +82,72 @@
                 }
             }
         },
-        "/api/user": {
+        "/api/user/create": {
+            "post": {
+                "summary": "create a new user",
+                "operationId": "1854111c61265030a5708391e2a17273",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "User's name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "User's email",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "description": "User's password",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User created successfully"
+                    },
+                    "422": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "summary": "Log out user and revoke JWT token",
+                "operationId": "ad65cbbd4e9f201619eae184a5961a98",
+                "responses": {
+                    "201": {
+                        "description": "Logout successful"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/me": {
             "get": {
                 "summary": "Get logged-in user details",
-                "operationId": "68f71ba285837ee66901e2681a219252",
+                "operationId": "48f39a643717b27108417372da062418",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -96,6 +158,81 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/users": {
+            "get": {
+                "summary": "Get all users",
+                "operationId": "32f813ea7a22e2b8b862ef93084426b9",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/user/delete": {
+            "delete": {
+                "summary": "Delete a user",
+                "operationId": "0027a09f62c7072bb8c746aded62c68f",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "The ID of the user you want to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "403": {
+                        "description": "SuperAdmin user cannot be deleted"
+                    }
+                }
+            }
+        },
+        "/api/user/update": {
+            "put": {
+                "summary": "Update a user",
+                "operationId": "0cfc432c796157e79e418318091f4305",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "The ID of the user you want to update",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "403": {
+                        "description": "SuperAdmin user cannot be updated"
+                    },
+                    "422": {
+                        "description": "Role does not exist"
+                    }
+                }
             }
         }
     },
