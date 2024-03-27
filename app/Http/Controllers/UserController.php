@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -148,4 +149,69 @@ class UserController extends Controller
         ], 201);
     }
 
+
+    /**
+     * @OA\Put(
+     *     path="/api/user/password/new",
+     *     summary="Update user password",
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="query",
+     *         description="The ID of the user you want to update",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="The new password ",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="201", description="Password updated successfully"),
+     *     @OA\Response(response="403", description="Unauthorized"),
+     * )
+     */
+    public function updateUserPw(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::find($request->user_id);
+        if (!$user) {
+            return response()->json(['message' => 'User not fount.'], 404);
+        }
+        $request->validate([
+            'password' => 'required|string|min:8',
+        ]);
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['message' => 'User Password updated successfully !'], 201);
+    }
+
+
+    /* @OA\Put(
+     *     path="/api/me/password/new",
+     *     summary="Update my password",
+     *     @OA\Parameter(
+     *         name="password",
+     *         in="query",
+     *         description="The new password ",
+     *         required=true,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response="201", description="Password updated successfully"),
+     *     @OA\Response(response="403", description="Unauthorized"),
+     * )
+     */
+    public function updateMyPw(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = request()->user();
+        $request->validate([
+            'password' => 'required|string|min:8',
+        ]);
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+        return response()->json(['message' => 'Your Password updated successfully !'], 201);
+    }
 }
