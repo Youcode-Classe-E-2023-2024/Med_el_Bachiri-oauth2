@@ -144,6 +144,129 @@
                 ]
             }
         },
+        "/api/role/create": {
+            "post": {
+                "summary": "Create new role.",
+                "operationId": "1a0b479e6348485c9d4f435b3fbf4345",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Role name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "permissions",
+                        "in": "query",
+                        "description": "Array of permissions to assign to the new role",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Role created successfully"
+                    },
+                    "403": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/roles": {
+            "get": {
+                "summary": "Get all roles.",
+                "operationId": "e666e3bfa734dc630ef312dee5267f25",
+                "responses": {
+                    "201": {
+                        "description": "Role created successfully"
+                    },
+                    "403": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/role/update/{role_id}": {
+            "put": {
+                "summary": "Update an existing role.",
+                "operationId": "d340c64206b01f6f23e23ea68c38e580",
+                "parameters": [
+                    {
+                        "name": "role_id",
+                        "in": "path",
+                        "description": "ID of the role to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "New role name",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "permissions",
+                        "in": "query",
+                        "description": "Array of the new permissions",
+                        "required": true,
+                        "style": "form",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Role updated successfully"
+                    },
+                    "403": {
+                        "description": "Validation errors"
+                    }
+                }
+            }
+        },
+        "/api/role/delete": {
+            "delete": {
+                "summary": "Delete role.",
+                "operationId": "64af4376f85f45b022bb002fe4c07065",
+                "parameters": [
+                    {
+                        "name": "role_id",
+                        "in": "query",
+                        "description": "Role ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Role deleted successfully"
+                    },
+                    "403": {
+                        "description": "Cannot delete SuperAdmin role."
+                    }
+                }
+            }
+        },
         "/api/me": {
             "get": {
                 "summary": "Get logged-in user details",
@@ -204,10 +327,10 @@
                 }
             }
         },
-        "/api/user/update": {
+        "/api/user/update/{user_id}": {
             "put": {
                 "summary": "Update a user",
-                "operationId": "0cfc432c796157e79e418318091f4305",
+                "operationId": "8b03adf6e1ed8e07c7bc74e0d3c9e702",
                 "parameters": [
                     {
                         "name": "user_id",
@@ -216,6 +339,33 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The new name of the user ( Don't fill if you don't want to updat the name)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "The new email of the user ( Don't fill the email if you don't want to update the email)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "role",
+                        "in": "query",
+                        "description": "The new role of the user ( Don't fill this if you don't want to update the role )",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
