@@ -50,12 +50,12 @@ class UserController extends Controller
         foreach ($users as $user) {
             $data[] = [
                 'user' => $user,
-                'role' => $user->roles()->pluck('name')->first(),
-                'permissions' => $user->roles()->first()->permissions()->pluck('name'),
+                'role' => $user->roles() ? $user->roles()->pluck('name')->first() : null,
+                'permissions' => $user->roles()->first() ?  $user->roles()->first()->permissions()->pluck('name') : [],
             ];
         }
 
-        return response()->json(['users' => $data], 200);
+        return response()->json(['users' => $data], 201);
 
     }
 
@@ -92,7 +92,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/user/update",
+     *     path="/api/user/update/{user_id}",
      *     summary="Update a user",
      *     @OA\Parameter(
      *         name="user_id",
@@ -100,6 +100,28 @@ class UserController extends Controller
      *         description="The ID of the user you want to update",
      *         required=true,
      *         @OA\Schema(type="integer")
+     *     ),
+     *
+     *     @OA\Parameter(
+     *         name="name",
+     *         in="query",
+     *         description="The new name of the user ( Don't fill if you don't want to updat the name)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="email",
+     *         in="query",
+     *         description="The new email of the user ( Don't fill the email if you don't want to update the email)",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="role",
+     *         in="query",
+     *         description="The new role of the user ( Don't fill this if you don't want to update the role )",
+     *         required=false,
+     *         @OA\Schema(type="string")
      *     ),
      *     @OA\Response(response="200", description="User updated successfully"),
      *     @OA\Response(response="404", description="User not found"),
