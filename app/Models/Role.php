@@ -18,7 +18,26 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class, 'role_has_permission');
     }
-        
+
+    public function assignPermissions($permissions)
+    {
+        if (!is_array($permissions)) {
+            return false;
+        }
+
+        return $this->permissions()->syncWithoutDetaching($permissions);
+    }
+
+
+    public function updatePermissions($permissions)
+    {
+        if (!is_array($permissions)) {
+            return false;
+        }
+
+        $this->permissions()->detach();
+        return $this->permissions()->sync($permissions);
+    }
 
     public function hasPermissionTo($permission)
     {
