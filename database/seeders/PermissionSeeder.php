@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PermissionSeeder extends Seeder
@@ -19,16 +18,19 @@ class PermissionSeeder extends Seeder
             'manage-users',
             'view-roles',
             'manage-roles',
+            'view-permissions'
         ];
 
+        $permissionIds = [];
         foreach ($permissions as $permissionName) {
-            Permission::firstOrCreate(['name' => $permissionName]);
+            $permission = Permission::firstOrCreate(['name' => $permissionName]);
+            $permissionIds[] = $permission->id;
         }
 
         $adminRole = Role::firstOrCreate(['name' => 'SuperAdmin']);
+        $adminRole->permissions()->sync($permissionIds);
 
-        foreach ($permissions as $permission) {
-            $adminRole->givePermissionTo($permission);
-        }
+        $userRole = Role::firstOrCreate(['name' => 'User']);
+        $userRole->permissions()->sync([1, 3, 5]);
     }
 }
