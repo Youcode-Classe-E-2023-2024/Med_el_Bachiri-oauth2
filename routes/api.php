@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\isAdmin;
 use Illuminate\Http\Request;
@@ -28,8 +30,9 @@ Route::namespace('Api')->group(function () {
 
         Route::get('me', [UserController::class, 'getUserDetails']);
 
+        Route::get('users', [UserController::class, 'getAllUsers'])->middleware('permission:view-users');
+
         Route::middleware('permission:manage-users')->group(function () {
-            Route::get('users', [UserController::class, 'getAllUsers']);
             Route::prefix('user')->group(function () {
                 Route::post('create', [AuthController::class, 'register']);
                 Route::delete('delete/{user_id}', [UserController::class, 'delete']);
@@ -37,9 +40,19 @@ Route::namespace('Api')->group(function () {
                 Route::put('password/new/{user_id}',[UserController::class, 'updateUserPw']);
             });
         });
-        Route::put('/me/password/new', [UserController::class, 'updateMyPw']);
-        Route::middleware('permission:manage-roles')->group(function () {
 
+        Route::get('permissions', [PermissionController::class, 'showAll']);
+
+        Route::put('/me/password/new', [UserController::class, 'updateMyPw']);
+
+        Route::get('roles', [RoleController::class, 'showAll'])->middleware('permission:view-roles');
+
+        Route::middleware('permission:manage-roles')->group(function () {
+            Route::prefix('role')->group(function () {
+                Route::post('create', [RoleController::class, 'create']);
+                Route::put('update/{role_id}', [RoleController::class, 'update']);
+                Route::delete('delete/{role_id}', [RoleController::class, 'destroy']);
+            });
         });
 
     });
