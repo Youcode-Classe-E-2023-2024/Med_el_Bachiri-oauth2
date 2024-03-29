@@ -31,7 +31,7 @@ class UserController extends Controller
             'user' => $user,
             'role' => $role->first() ? $role->first() : null,
             'permissions' => $permissions
-        ], 201);
+        ], 200);
     }
 
 
@@ -55,7 +55,7 @@ class UserController extends Controller
             ];
         }
 
-        return response()->json(['users' => $data], 201);
+        return response()->json(['users' => $data], 200);
 
     }
 
@@ -86,7 +86,7 @@ class UserController extends Controller
             return response()->json(['message' => 'SuperAdmin user cannot be deleted.'], 403);
         }
         $user->delete();
-        return response()->json(['message' => 'User deleted successfully.'], 201);
+        return response()->json(['message' => 'User deleted successfully.'], 200);
     }
 
 
@@ -157,7 +157,7 @@ class UserController extends Controller
         if ($request->filled('role')) {
             if (!$user->hasRole('SuperAdmin')) {
                 if (!$user->changeRole($request->role)) {
-                    return response()->json(['message' => "Role does not Exists. "], 403);
+                    return response()->json(['message' => "Role does not Exists. "], 404);
                 };
             } else {
                 return response()->json(['message' => "SuperAdmins role cannot be updated. "], 403);
@@ -168,7 +168,7 @@ class UserController extends Controller
 
         return response()->json([
             'message' => 'User updated successfully!'
-        ], 201);
+        ], 200);
     }
 
 
@@ -207,7 +207,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User Password updated successfully !'], 201);
+        return response()->json(['message' => 'User Password updated successfully !'], 200);
     }
 
     /**
@@ -234,6 +234,6 @@ class UserController extends Controller
         $user->update([
             'password' => Hash::make($request->password),
         ]);
-        return response()->json(['message' => 'Your Password updated successfully !'], 201);
+        return response()->json(['message' => 'Your Password updated successfully !'], 200);
     }
 }
