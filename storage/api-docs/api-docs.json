@@ -249,7 +249,7 @@
                 "parameters": [
                     {
                         "name": "role_id",
-                        "in": "query",
+                        "in": "path",
                         "description": "Role ID",
                         "required": true,
                         "schema": {
@@ -334,7 +334,7 @@
                 "parameters": [
                     {
                         "name": "user_id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The ID of the user you want to update",
                         "required": true,
                         "schema": {
@@ -385,14 +385,14 @@
                 }
             }
         },
-        "/api/user/password/new": {
+        "/api/user/password/new/{user_id}": {
             "put": {
                 "summary": "Update user password",
-                "operationId": "2a9dc0374c211b4c64125314c5b92631",
+                "operationId": "f6acec47a9597fa74dc409c324c1fca7",
                 "parameters": [
                     {
                         "name": "user_id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The ID of the user you want to update",
                         "required": true,
                         "schema": {
