@@ -28,7 +28,7 @@ Route::namespace('Api')->group(function () {
     Route::middleware('auth:api')->group( function () {
         Route::post('logout', [AuthController::class, 'logout']);
 
-        Route::get('me', [UserController::class, 'getUserDetails']);
+        Route::get('@me', [UserController::class, 'getUserDetails']);
 
         Route::get('users', [UserController::class, 'getAllUsers'])->middleware('permission:view-users');
 
@@ -41,9 +41,9 @@ Route::namespace('Api')->group(function () {
             });
         });
 
-        Route::get('permissions', [PermissionController::class, 'showAll']);
+        Route::get('permissions', [PermissionController::class, 'showAll'])->middleware('permission:view-permissions');
 
-        Route::put('/me/password/new', [UserController::class, 'updateMyPw']);
+        Route::put('/@me/password/new', [UserController::class, 'updateMyPw']);
 
         Route::get('roles', [RoleController::class, 'showAll'])->middleware('permission:view-roles');
 

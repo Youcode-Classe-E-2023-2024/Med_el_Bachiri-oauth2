@@ -267,10 +267,10 @@
                 }
             }
         },
-        "/api/me": {
+        "/api/@me": {
             "get": {
                 "summary": "Get logged-in user details",
-                "operationId": "48f39a643717b27108417372da062418",
+                "operationId": "b36ac7ec7c620238343e79426bb0f753",
                 "responses": {
                     "200": {
                         "description": "Success"
@@ -299,14 +299,14 @@
                 ]
             }
         },
-        "/api/user/delete": {
+        "/api/user/delete/{user_id}": {
             "delete": {
                 "summary": "Delete a user",
-                "operationId": "0027a09f62c7072bb8c746aded62c68f",
+                "operationId": "441469730e28bcb06ac4d5152118c4c5",
                 "parameters": [
                     {
                         "name": "user_id",
-                        "in": "query",
+                        "in": "path",
                         "description": "The ID of the user you want to delete",
                         "required": true,
                         "schema": {
@@ -419,10 +419,10 @@
                 }
             }
         },
-        "/api/me/password/new": {
+        "/api/@me/password/new": {
             "put": {
                 "summary": "Update my password",
-                "operationId": "3201f66aec9c6e5e8dc0882ab7b5e568",
+                "operationId": "6a810e29d82c56a188bb33783a8df824",
                 "parameters": [
                     {
                         "name": "password",

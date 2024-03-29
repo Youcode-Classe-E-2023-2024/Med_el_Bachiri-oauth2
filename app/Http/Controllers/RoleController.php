@@ -124,7 +124,7 @@ class RoleController extends Controller
      *     summary="Delete role.",
      *     @OA\Parameter(
      *         name="role_id",
-     *         in="query",
+     *         in="path",
      *         description="Role ID",
      *         required=true,
      *         @OA\Schema(type="integer")

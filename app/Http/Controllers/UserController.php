@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     /**
      * @OA\Get(
-     *     path="/api/me",
+     *     path="/api/@me",
      *     summary="Get logged-in user details",
      *     @OA\Response(response="200", description="Success"),
      *     security={{"bearerAuth":{}}}
@@ -61,11 +61,11 @@ class UserController extends Controller
 
     /**
      * @OA\Delete(
-     *     path="/api/user/delete",
+     *     path="/api/user/delete/{user_id}",
      *     summary="Delete a user",
      *     @OA\Parameter(
      *         name="user_id",
-     *         in="query",
+     *         in="path",
      *         description="The ID of the user you want to delete",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -96,7 +96,7 @@ class UserController extends Controller
      *     summary="Update a user",
      *     @OA\Parameter(
      *         name="user_id",
-     *         in="query",
+     *         in="path",
      *         description="The ID of the user you want to update",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -174,11 +174,11 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/user/password/new",
+     *     path="/api/user/password/new/{user_id}",
      *     summary="Update user password",
      *     @OA\Parameter(
      *         name="user_id",
-     *         in="query",
+     *         in="path",
      *         description="The ID of the user you want to update",
      *         required=true,
      *         @OA\Schema(type="integer")
@@ -212,7 +212,7 @@ class UserController extends Controller
 
     /**
      * @OA\Put(
-     *     path="/api/me/password/new",
+     *     path="/api/@me/password/new",
      *     summary="Update my password",
      *     @OA\Parameter(
      *         name="password",
