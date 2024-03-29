@@ -42,7 +42,7 @@ class RoleController extends Controller
             'name' => $request->name
         ]);
         $role->assignPermissions($request->permissions);
-        return response()->json(['message' => 'Role created successfully.']);
+        return response()->json(['message' => 'Role created successfully.'], 201);
     }
 
     /**
@@ -95,7 +95,7 @@ class RoleController extends Controller
     public function update(Request $request, string $id)
     {
         if (!Role::find($id)) {
-            return response()->json(['message' => 'Role now found.'], 403);
+            return response()->json(['message' => 'Role now found.'], 404);
         }
         $request->validate([
             'name' => 'nullable|min:3|max:20|unique:roles,name,' . $id,
@@ -113,7 +113,7 @@ class RoleController extends Controller
             $role->updatePermissions($request->permissions);
         }
 
-        return response()->json(['message' => 'Role updated successfully.']);
+        return response()->json(['message' => 'Role updated successfully.'], 200);
     }
 
 
@@ -137,12 +137,12 @@ class RoleController extends Controller
     {
         $role = Role::find($id);
         if (!$role) {
-            return response()->json(['message' => 'Role not found.'], 403);
+            return response()->json(['message' => 'Role not found.'], 404);
         }
         if ($role->id === 1) {
             return response()->json(['message' => 'Cannot delete SuperAdmin role.'], 403);
         }
         $role->delete();
-        return response()->json(['message' => 'Role deleted successfully.'], 201);
+        return response()->json(['message' => 'Role deleted successfully.'], 200);
     }
 }
