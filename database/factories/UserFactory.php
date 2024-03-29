@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,6 +26,16 @@ class UserFactory extends Factory
             'email' => $name.'@gmail.com',
             'password' => Hash::make($name.'@gmail.com'),
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (User $user) {
+            $role = Role::where('name', 'User')->first();
+            if ($role) {
+                $user->assignRole($role);
+            }
+        });
     }
 
     /**
