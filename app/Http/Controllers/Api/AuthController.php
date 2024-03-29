@@ -43,7 +43,7 @@ class AuthController extends Controller
         if (!Auth::attempt($credentials)) {
             return response()->json([
                 'message' => 'invalid email or password !',
-            ], 401);
+            ], 422);
         }
 
         $user = $request->user();
@@ -51,7 +51,7 @@ class AuthController extends Controller
         $user->access_token = $token->accessToken;
         return response()->json([
             'user' => $user,
-        ], 201);
+        ], 200);
     }
 
     // register
@@ -147,6 +147,6 @@ class AuthController extends Controller
         $request->user()->token()->revoke();
         return response()->json([
             'message' => 'User logged out successfully!'
-        ], 201);
+        ], 200);
     }
 }
