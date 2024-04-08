@@ -24,6 +24,7 @@ Route::namespace('Api')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
     });
+    Route::middleware('auth:api')->post('/auth/check', [AuthController::class, 'check']);
 
     Route::middleware('auth:api')->group( function () {
         Route::post('logout', [AuthController::class, 'logout']);
@@ -53,6 +54,7 @@ Route::namespace('Api')->group(function () {
                 Route::put('update/{role_id}', [RoleController::class, 'update']);
                 Route::delete('delete/{role_id}', [RoleController::class, 'destroy']);
             });
+            Route::get('/roles/{role_id}', [RoleController::class, 'show']);
         });
 
     });

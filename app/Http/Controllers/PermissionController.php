@@ -9,6 +9,9 @@ class PermissionController extends Controller
 {
     public function showAll()
     {
-        return response()->json([Permission::all()]);
+        return response()->json([
+            'success' => true,
+            'permissions' => Permission::all()
+        ]);
     }
 }

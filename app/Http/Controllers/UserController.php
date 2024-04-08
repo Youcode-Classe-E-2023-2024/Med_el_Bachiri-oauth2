@@ -28,6 +28,7 @@ class UserController extends Controller
         $permissions = $role->first() !== null ? $user->roles()->first()->permissions()->pluck('name') : [];
 
         return response()->json([
+            'success' => true,
             'user' => $user,
             'role' => $role->first() ? $role->first() : null,
             'permissions' => $permissions
@@ -86,7 +87,7 @@ class UserController extends Controller
             return response()->json(['message' => 'SuperAdmin user cannot be deleted.'], 403);
         }
         $user->delete();
-        return response()->json(['message' => 'User deleted successfully.'], 200);
+        return response()->json(['message' => 'User deleted successfully.', 'success' => true], 200);
     }
 
 
@@ -167,6 +168,7 @@ class UserController extends Controller
         $user->save();
 
         return response()->json([
+            'success' => true,
             'message' => 'User updated successfully!'
         ], 200);
     }
@@ -207,7 +209,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'User Password updated successfully !'], 200);
+        return response()->json(['message' => 'User Password updated successfully !', 'success' => true], 200);
     }
 
     /**
@@ -234,6 +236,6 @@ class UserController extends Controller
         $user->update([
             'password' => Hash::make($request->password),
         ]);
-        return response()->json(['message' => 'Your Password updated successfully !'], 200);
+        return response()->json(['message' => 'Your Password updated successfully !', 'success' => true], 200);
     }
 }

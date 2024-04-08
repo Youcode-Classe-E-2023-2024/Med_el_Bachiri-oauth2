@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -42,14 +43,16 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
         if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message' => 'invalid email or password !',
+                'success' => false,
+                'error' => 'invalid email or password !',
             ], 422);
         }
 
-        $user = $request->user() ?? User::where('email', $request->email)->first();
+        $user = User::with('roles')->where('email', $request->email)->first();
         $token = $user->createToken('Access Token');
         $user->access_token = $token->accessToken;
         return response()->json([
+            'success' => true,
             'user' => $user,
         ], 200);
     }
@@ -128,6 +131,7 @@ class AuthController extends Controller
         $user->assignRole('User');
 
         return response()->json([
+            'success' => true,
             'message' => 'user created successfully !'
         ], 201);
     }
@@ -146,7 +150,24 @@ class AuthController extends Controller
     {
         $request->user()->token()->revoke();
         return response()->json([
+            'success' => true,
             'message' => 'User logged out successfully!'
+        ], 200);
+    }
+
+    /**
+     * Check if a given access token is valid or not
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function check(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::with('roles')->where('id', $request->user()->id)->first();
+        return response()->json([
+            'success' => true,
+            'user' => $user,
+            'message' => 'Access token is valid',
         ], 200);
     }
 }

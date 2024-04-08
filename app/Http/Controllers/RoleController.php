@@ -42,7 +42,7 @@ class RoleController extends Controller
             'name' => $request->name
         ]);
         $role->assignPermissions($request->permissions);
-        return response()->json(['message' => 'Role created successfully.'], 201);
+        return response()->json(['message' => 'Role created successfully.', 'success' => true], 201);
     }
 
     /**
@@ -113,7 +113,7 @@ class RoleController extends Controller
             $role->updatePermissions($request->permissions);
         }
 
-        return response()->json(['message' => 'Role updated successfully.'], 200);
+        return response()->json(['message' => 'Role updated successfully.', 'success' => true], 200);
     }
 
 
@@ -143,6 +143,14 @@ class RoleController extends Controller
             return response()->json(['message' => 'Cannot delete SuperAdmin role.'], 403);
         }
         $role->delete();
-        return response()->json(['message' => 'Role deleted successfully.'], 200);
+        return response()->json([
+            'message' => 'Role deleted successfully.',
+            'success' => true,
+        ], 200);
+    }
+
+    public function show(Request $request){
+        $roles = Role::with('permissions')->where('id', $request->role_id)->first();
+        return response()->json(['roles' => $roles]);
     }
 }
